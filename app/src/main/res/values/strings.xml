@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TestComposeApplication</string>
+    <string name="test_text">It is a long established fact that a reader .</string>
+    <string name="nav_item_main">Главная</string>
+    <string name="nav_item_fav">Избранное</string>
+    <string name="nav_item_profile">Профиль</string>
+</resources>
