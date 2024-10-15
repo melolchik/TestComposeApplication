@@ -7,11 +7,18 @@ import com.example.testcomposeapplication.domain.FeedPost
 import com.example.testcomposeapplication.domain.StatisticItem
 
 class MainViewModelVk :ViewModel(){
-    private val _feedPost = MutableLiveData<FeedPost>(FeedPost())
-    val feedPost :LiveData<FeedPost> = _feedPost
 
-    fun updateCount(item : StatisticItem){
-        val oldStatistics = feedPost.value?.statistics ?:throw IllegalStateException()
+    private val _sourceList = mutableListOf<FeedPost>().apply {
+        repeat(20){
+            add(FeedPost(id = it))
+        }
+    }
+    private val _feedPosts = MutableLiveData<List<FeedPost>>(_sourceList)
+    val feedPosts :LiveData<List<FeedPost>> = _feedPosts
+
+    fun updateCount(feedPost:FeedPost, item : StatisticItem){
+        val oldPosts = feedPosts.value?.toMutableList() ?: mutableListOf()
+        val oldStatistics = feedPost.statistics
         val newStatistics = oldStatistics.toMutableList().apply {
             replaceAll { oldItem ->
                 if(oldItem.type == item.type){
@@ -21,6 +28,22 @@ class MainViewModelVk :ViewModel(){
                 }
             }
         }
-        _feedPost.value = feedPost.value?.copy(statistics = newStatistics)
+        val newFeedPost = feedPost.copy(statistics = newStatistics)
+        _feedPosts.value = oldPosts.apply {
+            replaceAll {
+                if (it.id == feedPost.id) {
+                    newFeedPost
+                } else {
+                    it
+                }
+            }
+        }
+
+    }
+
+    fun remove(feedPost: FeedPost){
+        val oldPosts = feedPosts.value?.toMutableList() ?: mutableListOf()
+        oldPosts.remove(feedPost)
+        _feedPosts.value = oldPosts
     }
 }
