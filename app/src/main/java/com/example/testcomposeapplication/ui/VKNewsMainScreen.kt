@@ -103,6 +103,8 @@ fun MainScreen(viewModel: MainViewModelVk) {
             profileScreenContent = {TextCounter(name = "Profile")})
 
 //        when (selectedNavItem) {
+    // 1) no backstack
+    // 2) don't save page state
 //            NavigationItem.Home -> {
 //
 //            }
@@ -123,7 +125,7 @@ fun MainScreen(viewModel: MainViewModelVk) {
 
 @Composable
 private fun TextCounter(name : String){
-    var count = remember {
+    val count = remember {
         mutableIntStateOf(0)
     }
     Text(

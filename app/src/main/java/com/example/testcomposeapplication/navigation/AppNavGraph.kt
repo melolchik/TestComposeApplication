@@ -13,6 +13,7 @@ fun AppNavGraph (navHostController: NavHostController,
     NavHost(
         navController = navHostController,
         startDestination = Screen.NewsFeed.route){
+        //new destination
         composable(Screen.NewsFeed.route){
             homeScreenContent()
         }
