@@ -30,6 +30,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -40,6 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.testcomposeapplication.MainViewModelVk
 import com.example.testcomposeapplication.domain.FeedPost
 import com.example.testcomposeapplication.navigation.AppNavGraph
+import com.example.testcomposeapplication.navigation.Screen
 import com.example.testcomposeapplication.ui.theme.TestComposeApplicationTheme
 
 
@@ -69,7 +71,14 @@ fun MainScreen(viewModel: MainViewModelVk) {
                         selected = currentRoute == item.screen.route,
                         onClick = {
                             //viewModel.selectNavItem(item)
-                                  navHostController.navigate(item.screen.route)
+                                  navHostController.navigate(item.screen.route){
+                                      popUpTo(Screen.NewsFeed.route){
+                                          saveState = true
+                                      }
+                                      //один экран в бэкстеке в топе -
+                                      launchSingleTop = true
+                                      restoreState = true
+                                  }
                         },
                         label = { Text(text = stringResource(item.titleResId)) },
                         icon = {
@@ -125,7 +134,7 @@ fun MainScreen(viewModel: MainViewModelVk) {
 
 @Composable
 private fun TextCounter(name : String){
-    val count = remember {
+    val count = rememberSaveable() {
         mutableIntStateOf(0)
     }
     Text(
